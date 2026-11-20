@@ -26,8 +26,7 @@ android {
             buildConfigField("String", "BASE_URL", "\"$baseUrl\"")
         }
         release {
-            // TODO: replace with your real HTTPS API address before publishing.
-            val baseUrl = (project.findProperty("bookingBaseUrl") as String?) ?: "https://api.example.com/"
+            val baseUrl = (project.findProperty("bookingBaseUrl") as String?) ?: "https://bookingtech-production.up.railway.app/"
             buildConfigField("String", "BASE_URL", "\"$baseUrl\"")
             isMinifyEnabled = false
             proguardFiles(
