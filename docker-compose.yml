@@ -1,17 +1,18 @@
 version: '3.8'
 
 services:
-  postgres:
-    image: postgres:15-alpine
-    container_name: booking_postgres
+  mysql:
+    image: mysql:8.0
+    container_name: booking_mysql
     environment:
-      POSTGRES_DB: booking_db
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      MYSQL_DATABASE: booking_db
+      MYSQL_USER: booking
+      MYSQL_PASSWORD: booking
+      MYSQL_ROOT_PASSWORD: root
     ports:
-      - "5432:5432"
+      - "3306:3306"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - mysql_data:/var/lib/mysql
 
   backend:
     build: ./backend
@@ -19,14 +20,15 @@ services:
     ports:
       - "8080:8080"
     environment:
-      DB_HOST: postgres
-      DB_PORT: 5432
+      DB_HOST: mysql
+      DB_PORT: 3306
       DB_NAME: booking_db
-      DB_USER: postgres
-      DB_PASSWORD: postgres
+      DB_USER: booking
+      DB_PASSWORD: booking
+      DB_USE_SSL: "false"
       JWT_SECRET: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
     depends_on:
-      - postgres
+      - mysql
 
 volumes:
-  postgres_data:
+  mysql_data:

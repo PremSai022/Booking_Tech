@@ -1,7 +1,7 @@
 -- Hyderabad Booking Marketplace Initial Schema V1
 
 CREATE TABLE users (
-    id SERIAL PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
     phone VARCHAR(20) UNIQUE NOT NULL,
     name VARCHAR(100) NOT NULL,
     role VARCHAR(20) NOT NULL CHECK (role IN ('CUSTOMER', 'PARTNER', 'ADMIN')),
@@ -10,7 +10,7 @@ CREATE TABLE users (
 );
 
 CREATE TABLE partners (
-    id SERIAL PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT REFERENCES users(id) ON DELETE CASCADE,
     type VARCHAR(20) NOT NULL CHECK (type IN ('SALON', 'TUTOR')),
     business_name VARCHAR(150) NOT NULL,
@@ -26,14 +26,14 @@ CREATE TABLE partners (
 );
 
 CREATE TABLE partner_documents (
-    id SERIAL PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
     partner_id INT REFERENCES partners(id) ON DELETE CASCADE,
     doc_type VARCHAR(50) NOT NULL,
     url VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE services (
-    id SERIAL PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
     partner_id INT REFERENCES partners(id) ON DELETE CASCADE,
     category VARCHAR(20) NOT NULL CHECK (category IN ('SALON', 'TUITION')),
     name VARCHAR(150) NOT NULL,
@@ -45,7 +45,7 @@ CREATE TABLE services (
 );
 
 CREATE TABLE working_hours (
-    id SERIAL PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
     partner_id INT REFERENCES partners(id) ON DELETE CASCADE,
     day_of_week VARCHAR(20) NOT NULL,
     open_time TIME NOT NULL,
@@ -53,14 +53,14 @@ CREATE TABLE working_hours (
 );
 
 CREATE TABLE time_off (
-    id SERIAL PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
     partner_id INT REFERENCES partners(id) ON DELETE CASCADE,
     start_at TIMESTAMP NOT NULL,
     end_at TIMESTAMP NOT NULL
 );
 
 CREATE TABLE bookings (
-    id SERIAL PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
     customer_id INT REFERENCES users(id) ON DELETE CASCADE,
     partner_id INT REFERENCES partners(id) ON DELETE CASCADE,
     service_id INT REFERENCES services(id) ON DELETE CASCADE,
@@ -76,7 +76,7 @@ CREATE TABLE bookings (
 );
 
 CREATE TABLE payments (
-    id SERIAL PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
     booking_id INT REFERENCES bookings(id) ON DELETE CASCADE,
     razorpay_order_id VARCHAR(100),
     razorpay_payment_id VARCHAR(100),
@@ -86,7 +86,7 @@ CREATE TABLE payments (
 );
 
 CREATE TABLE payouts (
-    id SERIAL PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
     partner_id INT REFERENCES partners(id) ON DELETE CASCADE,
     amount DECIMAL(10, 2) NOT NULL,
     status VARCHAR(20) DEFAULT 'PENDING',
@@ -95,7 +95,7 @@ CREATE TABLE payouts (
 );
 
 CREATE TABLE reviews (
-    id SERIAL PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
     booking_id INT REFERENCES bookings(id) ON DELETE CASCADE,
     customer_id INT REFERENCES users(id) ON DELETE CASCADE,
     partner_id INT REFERENCES partners(id) ON DELETE CASCADE,
@@ -105,7 +105,7 @@ CREATE TABLE reviews (
 );
 
 CREATE TABLE notifications (
-    id SERIAL PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT REFERENCES users(id) ON DELETE CASCADE,
     title VARCHAR(150) NOT NULL,
     body TEXT NOT NULL,

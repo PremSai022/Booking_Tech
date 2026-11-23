@@ -23,8 +23,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
     implementation("org.flywaydb:flyway-core:10.10.0")
-    implementation("org.flywaydb:flyway-database-postgresql:10.10.0")
-    implementation("org.postgresql:postgresql:42.7.3")
+    implementation("org.flywaydb:flyway-mysql:10.10.0")
+    runtimeOnly("com.mysql:mysql-connector-j")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0")
     
     // JWT
