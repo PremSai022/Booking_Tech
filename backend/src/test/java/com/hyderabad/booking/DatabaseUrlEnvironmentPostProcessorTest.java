@@ -19,7 +19,7 @@ class DatabaseUrlEnvironmentPostProcessorTest {
 
         processor.postProcessEnvironment(env, null);
 
-        assertEquals("jdbc:mysql://mysql.railway.internal:3306/railway?useSSL=false&serverTimezone=UTC"
+        assertEquals("jdbc:mysql://mysql.railway.internal:3306/booking_db?useSSL=false&serverTimezone=UTC"
                         + "&allowPublicKeyRetrieval=true&createDatabaseIfNotExist=true",
                 env.getProperty("spring.datasource.url"));
         assertEquals("root", env.getProperty("spring.datasource.username"));
@@ -27,13 +27,26 @@ class DatabaseUrlEnvironmentPostProcessorTest {
     }
 
     @Test
-    void leavesJdbcUrlUntouched() {
+    void forcesOwnDatabaseOnJdbcUrl() {
         MockEnvironment env = new MockEnvironment()
                 .withProperty("spring.datasource.url", "jdbc:mysql://localhost:3306/railway");
 
         processor.postProcessEnvironment(env, null);
 
-        assertEquals("jdbc:mysql://localhost:3306/booking_db", env.getProperty("spring.datasource.url"));
+        assertEquals("jdbc:mysql://localhost:3306/booking_db?useSSL=false&serverTimezone=UTC"
+                        + "&allowPublicKeyRetrieval=true&createDatabaseIfNotExist=true", env.getProperty("spring.datasource.url"));
         assertNull(env.getProperty("spring.datasource.password"));
+    }
+
+    @Test
+    void usesDbNameOverride() {
+        MockEnvironment env = new MockEnvironment()
+                .withProperty("spring.datasource.url", "jdbc:mysql://h:3306/railway?useSSL=true")
+                .withProperty("DB_NAME", "my_app");
+
+        processor.postProcessEnvironment(env, null);
+
+        assertEquals("jdbc:mysql://h:3306/my_app?useSSL=true&createDatabaseIfNotExist=true",
+                env.getProperty("spring.datasource.url"));
     }
 }
